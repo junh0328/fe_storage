@@ -16,6 +16,8 @@
   - propTypes
   - defaultProps
 
+- [flag](#flag)
+
 - [인피니티 스크롤](#인피니티-스크롤)
 
 ## Class Component Functional Component
@@ -270,5 +272,9 @@ Welcome.defaultProps = {
 ```
 
 자식 컴포넌트로 전달되는 props가 없는 경우 렌더링 실패 없이 보여줄 수 있습니다.
+
+## flag
+
+**flag(플래그)**는 크로스 브라우징(다양한 웹브라우저에서 깨지지 않게 보이는 웹페이지 제작 기술)을 지원하기 위해 존재합니다.
 
 ## 인피니티 스크롤
