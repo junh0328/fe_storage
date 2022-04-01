@@ -5,6 +5,9 @@ import { CustomForm, DragContainer, ButtonContainer } from "./app_style";
 
 /**
  * Dictionary 구조의 DnD
+ * 결과적으로 말하자면 DnD 내부 로직을 돌며 구조가 배열(Array) 구조로 변경된다
+ * 딕셔너리 구조는 사용자가 연속되는 수로 적었다고 하더라도 인덱스를 통해 순회가능한 구조가 아니다
+ * 따라서 딕셔너리 구조에서 splice 등의 Array.prototype 메서드를 쓰는 것은 불가능하다
  */
 
 const App2 = () => {

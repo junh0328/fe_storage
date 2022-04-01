@@ -24,4 +24,13 @@ export const DragContainer = styled.div`
       margin-right: 2%;
     }
   }
+
+  .content {
+    margin-right: 1%;
+  }
+
+  .remove {
+    color: red;
+    cursor: pointer;
+  }
 `;

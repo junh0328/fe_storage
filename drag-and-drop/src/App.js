@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { CustomForm, DragContainer, ButtonContainer } from "./app_style";
@@ -17,13 +17,17 @@ const App = () => {
   ]);
   const cnt = useRef(6);
 
+  useEffect(() => {
+    console.log("items:", items);
+  }, [items]);
+
   const onDragEnd = (result) => {
+    console.log("result: ", result);
     if (!result.destination) {
       return;
     }
 
     const arr = reorder(items, result.source.index, result.destination.index);
-
     setItems(arr);
   };
 
@@ -57,6 +61,15 @@ const App = () => {
     [items]
   );
 
+  const onFilter = useCallback(
+    (idx) => {
+      let arr = [...items];
+      arr.splice(idx, 1);
+      setItems(arr);
+    },
+    [items]
+  );
+
   return (
     <CustomForm onSubmit={onSubmit}>
       <ButtonContainer>
@@ -84,6 +97,12 @@ const App = () => {
                       >
                         <span className="content" type="text">
                           {item.content}
+                        </span>
+                        <span
+                          onClick={() => onFilter(index)}
+                          className="remove"
+                        >
+                          [X]
                         </span>
                       </div>
                     )}
