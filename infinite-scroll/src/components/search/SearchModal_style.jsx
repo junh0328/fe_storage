@@ -55,6 +55,11 @@ export const SearchModalContainer = styled.div`
       background-color: grey;
     }
 
-
+    .noResult{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
   }
 `;

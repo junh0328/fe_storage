@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import SearchModal from "./SearchModal.js";
 import { SearchContainer } from "./styled.jsx";
 
 const Search = () => {
   const [onSearch, setOnSearch] = useState(false);
-  useEffect(() => {}, []);
+
   return (
     <SearchContainer>
       <div className="title">Googol</div>
