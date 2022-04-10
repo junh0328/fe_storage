@@ -1,11 +1,7 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { CustomForm, DragContainer, ButtonContainer } from "./app_style";
-
-/**
- * Array 구조의 DnD
- */
 
 const App = () => {
   const [items, setItems] = useState([
@@ -17,12 +13,7 @@ const App = () => {
   ]);
   const cnt = useRef(6);
 
-  useEffect(() => {
-    console.log("items:", items);
-  }, [items]);
-
   const onDragEnd = (result) => {
-    console.log("result: ", result);
     if (!result.destination) {
       return;
     }
