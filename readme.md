@@ -254,4 +254,263 @@ Welcome.defaultProps = {
 
 ## 인피니티 스크롤
 
-## 드래그 앤 드랍
+## 드래그 앤 드롭
+
+**드래그 앤 드롭** 은 유저의 경험(= UX)를 높일 수 있는 라이브러리 중 하나입니다.
+
+예를 들어 비 개발자가 배열의 순서를 코드가 아닌 렌더링된 화면 상에서 조정해야 할 경우, index 와 같은 순서 체계를 모른다면 조정이 쉽지 않을 수 있습니다.
+
+오디오 데이터를 삽입해야 하는데, 인덱스 순서를 조정할 수 없는 채로 push push push 를 반복하게 된다면 중간에 원하는 값(오디오)을 삽입하기 어려울 것입니다.
+
+이를 효과적으로 다루기 위해서 드래그 앤 드랍 라이브러리를 배워두면 매우 유용하게 배열을 제어할 수 있습니다.
+
+```
+$ yarn add react-beautiful-dnd
+$ yarn add styled-components
+```
+
+[react-beautiful-dnd](https://github.com/atlassian/react-beautiful-dnd) 레포지토리 바로가기
+
+<details>
+<summary>리액트 코드로 보기</summary>
+
+```js
+import React, { useCallback, useRef, useState } from "react";
+import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+
+import { CustomForm, DragContainer, ButtonContainer } from "./app_style";
+
+const App = () => {
+  const [items, setItems] = useState([
+    { id: `1`, content: `item 1` },
+    { id: `2`, content: `item 2` },
+    { id: `3`, content: `item 3` },
+    { id: `4`, content: `item 4` },
+    { id: `5`, content: `item 5` },
+  ]);
+  const cnt = useRef(6);
+
+  const onDragEnd = (result) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const arr = reorder(items, result.source.index, result.destination.index);
+    setItems(arr);
+  };
+
+  const reorder = (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+  };
+
+  const onAdd = useCallback(() => {
+    let arr = [];
+
+    arr = [...items];
+
+    arr.push({
+      id: cnt.current.toString(),
+      content: "item " + cnt.current.toString(),
+    });
+
+    setItems(arr);
+    cnt.current += 1;
+  }, [items, cnt]);
+
+  const onSubmit = useCallback(
+    (e) => {
+      e.preventDefault();
+      console.log("items: ", items);
+    },
+    [items]
+  );
+
+  const onFilter = useCallback(
+    (idx) => {
+      let arr = [...items];
+      arr.splice(idx, 1);
+      setItems(arr);
+    },
+    [items]
+  );
+
+  return (
+    <CustomForm onSubmit={onSubmit}>
+      <ButtonContainer>
+        <button type="button" onClick={onAdd}>
+          Add
+        </button>
+        <button type="button" onClick={onSubmit}>
+          Submit
+        </button>
+      </ButtonContainer>
+
+      <DragContainer>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable">
+            {(provided, snapshot) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {items.map((item, index) => (
+                  <Draggable key={item.id} draggableId={item.id} index={index}>
+                    {(provided, snapshot) => (
+                      <div
+                        className="flex"
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                      >
+                        <span className="content" type="text">
+                          {item.content}
+                        </span>
+                        <span
+                          onClick={() => onFilter(index)}
+                          className="remove"
+                        >
+                          [X]
+                        </span>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </DragContainer>
+    </CustomForm>
+  );
+};
+
+export default App;
+```
+
+</details>
+
+<details>
+<summary>styled-components 스타일링 코드 보기</summary>
+
+```js
+import styled from "styled-components";
+
+export const CustomForm = styled.form`
+  width: 96%;
+  padding: 2%;
+`;
+
+export const ButtonContainer = styled.div`
+  button {
+    margin-right: 1%;
+  }
+`;
+
+export const DragContainer = styled.div`
+  margin-top: 1%;
+  .flex {
+    margin-bottom: 1%;
+    padding: 0.5%;
+    display: flex;
+    justify-content: flex-start;
+    border: 1px solid black;
+
+    input[type="text"] {
+      margin-right: 2%;
+    }
+  }
+
+  .content {
+    margin-right: 1%;
+  }
+
+  .remove {
+    color: red;
+    cursor: pointer;
+  }
+`;
+```
+
+</details>
+
+<br/>
+
+### 주의사항
+
+`1.` 드래그 앤 드롭 코드 내에서 특별한 점은 반드시 인덱싱을 할 수 있는 **id** 값이 문자열이여 한다는 것입니다.
+
+또한 제어를 위한 프로퍼티 이름이 반드시 **id** 일 필요는 없습니다.
+
+```js
+const [items, setItems] = useState([
+  { id: `1`, content: `item 1` },
+  { id: `2`, content: `item 2` },
+  { id: `3`, content: `item 3` },
+  { id: `4`, content: `item 4` },
+  { id: `5`, content: `item 5` },
+]);
+
+...
+
+<Draggable key={item.id} draggableId={item.id} index={index}>
+  {(provided, snapshot) => (
+    <div
+      className="flex"
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+    >
+      <span className="content" type="text">
+        {item.content}
+      </span>
+      <span onClick={() => onFilter(index)} className="remove">
+        [X]
+      </span>
+    </div>
+  )}
+</Draggable>;
+```
+
+`Draggable` 컴포넌트의 key 값이 `item.id` 인 이유는 사전에 구성한 배열이 `id` 이기 때문이고 예를 들어 `order`, `idx` 등으로도 추적이 가능합니다.
+
+```js
+const [items, setItems] = useState([
+  {idx: `1`, content: `item 1` },
+  {idx: `2`, content: `item 2` },
+  {idx: `3`, content: `item 3` },
+  {idx: `4`, content: `item 4` },
+  {idx: `5`, content: `item 5` },
+]);
+
+...
+
+<Draggable key={item.idx} draggableId={item.idx} index={index}>
+  {(provided, snapshot) => (
+    <div
+      className="flex"
+      ref={provided.innerRef}
+      {...provided.draggableProps}
+      {...provided.dragHandleProps}
+    >
+      <span className="content" type="text">
+        {item.content}
+      </span>
+      <span onClick={() => onFilter(index)} className="remove">
+        [X]
+      </span>
+    </div>
+  )}
+</Draggable>;
+```
+
+`2.` 드래그앤 드롭을 효과적으로 컨트롤 할 수 있는 구조는 배열구조입니다. 인덱싱을 바탕으로 Array.prototype 메서드를 이용하기 때문에, `딕셔너리` 자료구조와 같이 순서에 얽메이지 않는 자료구조를 사용할 경우 의도와 다르게 동작할 수 있습니다.
+
+`3.` 실질적인 flow는 다음과 같습니다.
+
+- 마우스 이벤트를 바탕으로 구조를 변경할 배열을 캐치합니다
+- 원하고자 하는 위치의 위 또는 아래로 드래그 이후 드랍합니다
+- `DragDropContext` 의 프로퍼티인 `onDragEnd={onDragEnd}` 를 바탕으로 배열을 재정리합니다
+- `onDragEnd` 메서드의 내부는 모두 배열의 프로토타입 메서드(splice, push, ...)를 이용합니다
+- onSubmit , useEffect 등으로 변경된 배열의 인덱싱 순서를 관측하고 캐치할 수 있습니다
