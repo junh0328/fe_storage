@@ -6,7 +6,7 @@
 
 ## 목차
 
-- [Class Component Functional Component](#Class-Component-Functional-Component)
+- [Class Component Function Component](#Class-Component-Function-Component)
 
   - state 참조하기
   - props 참조하기
@@ -20,19 +20,19 @@
 
 - [인피니티 스크롤](#인피니티-스크롤)
 
-- [드래그 앤 드랍](#드래그-앤-드랍)
+- [드래그 앤 드롭](#드래그-앤-드롭)
 
-## Class Component Functional Component
+## Class Component Function Component
 
-리액트는 현재 함수형 컴포넌트가 주를 이루고 있지만, 리액트의 근본은 클래스 컴포넌트입니다.
+리액트는 현재 함수 컴포넌트가 주를 이루고 있지만, 리액트의 근본은 클래스 컴포넌트입니다.
 
-실무를 가게 되면 '나는 함수형 컴포넌트만 쓸거야'라고 생각했지만, 클래스형일 때 더욱 빛나는 또는 레거시로 남겨진 클래스형 컴포넌트 들이 존재합니다.
+실무를 가게 되면 '나는 함수 컴포넌트만 쓸거야'라고 생각했지만, 클래스형일 때 더욱 빛나는 또는 레거시로 남겨진 클래스 컴포넌트 들이 존재합니다.
 
-그렇기 때문에 state, props를 다루는 기본적인 내용을 우선적으로 공부하고 실무로 들어갈 필요가 있습니다
+그렇기 때문에 state, props를 다루는 기본적인 내용을 우선적으로 공부하고 실무로 들어갈 필요가 있습니다.
 
 ### state 참조하기
 
-`case1: functional component`
+`case1: function component`
 
 ```js
 import { useState } from "react";
@@ -67,7 +67,7 @@ export default App;
 
 ### props 참조하기
 
-`case1: functional component`
+`case1: function component`
 
 ```js
 /* 부모 컴포넌트 🔥 */
