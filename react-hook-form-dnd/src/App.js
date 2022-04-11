@@ -1,7 +1,8 @@
-import OriginalDraggable from "./components/originalDraggable";
+import DragAndDropModal from "./components/dragAndDropModal";
+// import OriginalDraggable from "./components/originalDraggable";
 
 function App() {
-  return <OriginalDraggable />;
+  return <DragAndDropModal />;
 }
 
 export default App;
